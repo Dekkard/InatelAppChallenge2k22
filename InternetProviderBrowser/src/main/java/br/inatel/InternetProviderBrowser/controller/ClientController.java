@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.inatel.InternetProviderBrowser.model.Client;
 import br.inatel.InternetProviderBrowser.model.ClientDTO;
-import br.inatel.InternetProviderBrowser.model.ServiceProvided;
 import br.inatel.InternetProviderBrowser.service.ClientService;
 import br.inatel.InternetProviderBrowser.service.ServiceProvidedService;
 
@@ -21,12 +20,10 @@ public class ClientController implements ControllerModel<Client, ClientDTO, Long
 
 	@Autowired
 	ClientService cs;
-	@Autowired
-	ServiceProvidedService sps;
 
 	@Override
 	public ResponseEntity<List<ClientDTO>> getMappingMethod() {
-		List<Client> listClient = cs.list();
+		List<Client> listClient = cs.list();																																																																																																																																																				
 		List<ClientDTO> listClientDTO = listClient.stream().map(Client::modeltoDTO).collect(Collectors.toList());
 		if (!listClientDTO.isEmpty())
 			return new ResponseEntity<>(listClientDTO, HttpStatus.OK);

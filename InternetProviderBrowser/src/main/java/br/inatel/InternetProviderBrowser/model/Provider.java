@@ -3,15 +3,19 @@ package br.inatel.InternetProviderBrowser.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Length;
 
+@Entity
 public class Provider {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,10 +26,11 @@ public class Provider {
 	@Length(max = 511)
 	@NotNull
 	private String description;
-	@Size(min = 14, max = 14)
+	@Min(14)
+	@Max(14)
 	@NotNull
 	private Long cnpj;
-	@ManyToOne
+	@OneToMany
 	private List<ServiceProvided> listService = new ArrayList<>();
 
 	public Provider() {

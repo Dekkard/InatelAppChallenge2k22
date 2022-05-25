@@ -25,13 +25,13 @@ public class ClientDTO {
 	}
 
 	public ClientDTO(Long id, String name, Long cpf, String birthDate,
-			List<ServiceProvidedDTO> listServiceProvidedDTOs) {
+			List<ServiceProvidedDTO> listServiceProvidedDTO) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.cpf = cpf;
 		this.birthDate = birthDate;
-		this.listServiceProvidedDTOs = listServiceProvidedDTOs;
+		this.listServiceProvidedDTOs = listServiceProvidedDTO;
 	}
 
 	public Long getId() {

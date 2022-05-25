@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -23,7 +24,7 @@ public class Client {
 	@Length(max = 255)
 	@NotNull
 	private String name;
-	@Size(min = 10, max = 11)
+	@Digits(integer = 11, fraction = 0)
 	@NotNull
 	private Long cpf;
 	private LocalDate birthDate;
@@ -33,7 +34,7 @@ public class Client {
 	public Client() {
 	}
 
-	public Client(@Length(max = 255) @NotNull String name, @Size(min = 10, max = 11) @NotNull Long cpf,
+	public Client(@Length(max = 255) @NotNull String name, @Digits(integer = 11, fraction = 0) @NotNull Long cpf,
 			LocalDate birthDate) {
 		super();
 		this.name = name;
@@ -50,6 +51,16 @@ public class Client {
 		this.birthDate = birthDate;
 	}
 
+	public Client(Long id, @Length(max = 255) @NotNull String name, @Size(min = 10, max = 11) @NotNull Long cpf,
+			LocalDate birthDate, List<ServiceProvided> listServiceProvided) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.cpf = cpf;
+		this.birthDate = birthDate;
+		this.listService = listServiceProvided;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -61,7 +72,7 @@ public class Client {
 	public Long getCpf() {
 		return cpf;
 	}
-	
+
 	public List<ServiceProvided> getListService() {
 		return listService;
 	}
@@ -82,10 +93,14 @@ public class Client {
 		this.birthDate = birthDate;
 	}
 
+	public void setListService(List<ServiceProvided> listService) {
+		this.listService = listService;
+	}
+
 	public static ClientDTO modeltoDTO(Client c) {
 		ClientDTO clientDTO = new ClientDTO(c.getId(), c.getName(), c.getCpf(),
 				c.getBirthDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-		
+
 		return clientDTO;
 	}
 

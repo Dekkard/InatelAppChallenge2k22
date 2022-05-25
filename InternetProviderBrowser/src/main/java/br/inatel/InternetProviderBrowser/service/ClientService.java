@@ -18,7 +18,7 @@ public class ClientService implements ServiceModel<Client, Long> {
 
 	@Override
 	public List<Client> list() {
-		return em.createQuery("SELECT c FROM Cliente c", Client.class).getResultList();
+		return em.createQuery("SELECT c FROM Client c", Client.class).getResultList();
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class ClientService implements ServiceModel<Client, Long> {
 
 	@Override
 	public Client update(Long id, Client client) {
-		Client c = em.find(Client.class, client.getId());
+		Client c = em.find(Client.class, id);
 		c.setName(client.getName());
 		c.setCpf(client.getCpf());
 		c.setBirthDate(client.getBirthDate());
