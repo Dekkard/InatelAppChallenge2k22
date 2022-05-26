@@ -8,17 +8,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import br.inatel.InternetProviderBrowser.config.security.model.Usuario;
+import br.inatel.InternetProviderBrowser.config.security.model.User;
 
 @Service
-public class AuthenticationService implements UserDetailsService{
+public class ClientAuthenticationService implements UserDetailsService{
 
 	@Autowired
-	UserRepo ur;
+	UserService clientService;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<Usuario> userOpt = ur.findByEmail(username);
+		Optional<User> userOpt = clientService.findByEmail(username);
 		if(userOpt.isPresent())
 			return userOpt.get();
 		else

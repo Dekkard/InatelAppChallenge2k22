@@ -3,7 +3,6 @@ package br.inatel.InternetProviderBrowser.config.security.model;
 import java.util.Collection;
 import java.util.List;
 
-import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,8 +12,8 @@ import javax.persistence.ManyToMany;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Entity
-public class Usuario implements UserDetails {
+//@Entity
+public class User implements UserDetails {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,11 +24,18 @@ public class Usuario implements UserDetails {
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Perfis> perfis;
 
-	public Usuario() {
+	public User() {
 		super();
 	}
 
-	public Usuario(Long id, String username, String password, String email) {
+	public User(String username, String password, String email) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.email = email;
+	}
+	
+	public User(Long id, String username, String password, String email) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -39,10 +45,6 @@ public class Usuario implements UserDetails {
 
 	public Long getId() {
 		return id;
-	}
-
-	public String getUsername() {
-		return username;
 	}
 
 	public String getPassword() {
@@ -55,10 +57,6 @@ public class Usuario implements UserDetails {
 
 	public List<Perfis> getPerfis() {
 		return perfis;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
 	}
 
 	public void setEmail(String email) {
@@ -98,4 +96,10 @@ public class Usuario implements UserDetails {
 		return true;
 	}
 
+	@Override
+	public String getUsername() {
+		return username;
+	}
+
+	
 }

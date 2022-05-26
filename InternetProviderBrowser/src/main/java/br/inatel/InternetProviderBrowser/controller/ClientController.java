@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.inatel.InternetProviderBrowser.model.Client;
-import br.inatel.InternetProviderBrowser.model.ClientDTO;
+import br.inatel.InternetProviderBrowser.model.DTO.ClientDTO;
 import br.inatel.InternetProviderBrowser.service.ClientService;
-import br.inatel.InternetProviderBrowser.service.ServiceProvidedService;
+import br.inatel.InternetProviderBrowser.service.PlanService;
 
 @RestController
 @RequestMapping("/client")

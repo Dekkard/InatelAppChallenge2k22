@@ -1,9 +1,11 @@
-package br.inatel.InternetProviderBrowser.model;
+package br.inatel.InternetProviderBrowser.model.DTO;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import br.inatel.InternetProviderBrowser.model.Client;
 
 public class ClientDTO {
 	private Long id;
@@ -11,7 +13,7 @@ public class ClientDTO {
 	private Long cpf;
 	private String birthDate;
 
-	private List<ServiceProvidedDTO> listServiceProvidedDTOs = new ArrayList<>();
+	private List<PlanDTO> listServiceProvidedDTOs = new ArrayList<>();
 
 	public ClientDTO() {
 	}
@@ -25,7 +27,7 @@ public class ClientDTO {
 	}
 
 	public ClientDTO(Long id, String name, Long cpf, String birthDate,
-			List<ServiceProvidedDTO> listServiceProvidedDTO) {
+			List<PlanDTO> listServiceProvidedDTO) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -50,7 +52,7 @@ public class ClientDTO {
 		return birthDate;
 	}
 
-	public List<ServiceProvidedDTO> getListServiceProvidedDTOs() {
+	public List<PlanDTO> getListServiceProvidedDTOs() {
 		return listServiceProvidedDTOs;
 	}
 

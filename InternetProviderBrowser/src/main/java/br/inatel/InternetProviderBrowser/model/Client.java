@@ -12,9 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Length;
+
+import br.inatel.InternetProviderBrowser.model.DTO.ClientDTO;
 
 @Entity
 public class Client {
@@ -29,9 +30,16 @@ public class Client {
 	private Long cpf;
 	private LocalDate birthDate;
 	@ManyToMany
-	private List<ServiceProvided> listService = new ArrayList<>();
+	private List<Plan> listPlan = new ArrayList<>();
 
 	public Client() {
+	}
+	public Client(Client c) {
+		super();
+//		this.id = c.getId();
+		this.name = c.getName();
+		this.cpf = c.getCpf();
+		this.birthDate = getBirthDate();
 	}
 
 	public Client(@Length(max = 255) @NotNull String name, @Digits(integer = 11, fraction = 0) @NotNull Long cpf,
@@ -42,7 +50,7 @@ public class Client {
 		this.birthDate = birthDate;
 	}
 
-	public Client(Long id, @Length(max = 255) @NotNull String name, @Size(min = 10, max = 11) @NotNull Long cpf,
+	public Client(Long id, @Length(max = 255) @NotNull String name, @Digits(integer = 11, fraction = 0) @NotNull Long cpf,
 			LocalDate birthDate) {
 		super();
 		this.id = id;
@@ -51,14 +59,14 @@ public class Client {
 		this.birthDate = birthDate;
 	}
 
-	public Client(Long id, @Length(max = 255) @NotNull String name, @Size(min = 10, max = 11) @NotNull Long cpf,
-			LocalDate birthDate, List<ServiceProvided> listServiceProvided) {
+	public Client(Long id, @Length(max = 255) @NotNull String name, @Digits(integer = 11, fraction = 0) @NotNull Long cpf,
+			LocalDate birthDate, List<Plan> listPlan) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.cpf = cpf;
 		this.birthDate = birthDate;
-		this.listService = listServiceProvided;
+		this.listPlan = listPlan;
 	}
 
 	public Long getId() {
@@ -73,8 +81,8 @@ public class Client {
 		return cpf;
 	}
 
-	public List<ServiceProvided> getListService() {
-		return listService;
+	public List<Plan> getPlan() {
+		return listPlan;
 	}
 
 	public LocalDate getBirthDate() {
@@ -93,8 +101,8 @@ public class Client {
 		this.birthDate = birthDate;
 	}
 
-	public void setListService(List<ServiceProvided> listService) {
-		this.listService = listService;
+	public void setListService(List<Plan> listService) {
+		this.listPlan = listService;
 	}
 
 	public static ClientDTO modeltoDTO(Client c) {

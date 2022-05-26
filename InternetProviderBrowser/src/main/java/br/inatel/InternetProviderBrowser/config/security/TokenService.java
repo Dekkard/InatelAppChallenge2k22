@@ -5,7 +5,7 @@ import java.util.Date;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import br.inatel.InternetProviderBrowser.config.security.model.Usuario;
+import br.inatel.InternetProviderBrowser.config.security.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -16,11 +16,11 @@ public class TokenService {
 
 	public String gerarToken(Authentication a) {
 		Date now = new Date();
-		return Jwts.builder().setIssuer("Spring Boot Security Model")
-				.setSubject(((Usuario) a.getPrincipal()).getId().toString())
-				.setIssuedAt(now)
-				.setExpiration(new Date(now.getTime() + (86400000l)))
-				.signWith(SignatureAlgorithm.HS256, secretKey)
+		return Jwts.builder().setIssuer("Spring Boot Security Model")//
+				.setSubject(((User) a.getPrincipal()).getId().toString())//
+				.setIssuedAt(now)//
+				.setExpiration(new Date(now.getTime() + (900000l)))//
+				.signWith(SignatureAlgorithm.HS256, secretKey)//
 				.compact();
 	}
 

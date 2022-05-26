@@ -6,24 +6,23 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import br.inatel.InternetProviderBrowser.config.security.AuthenticationService;
+import br.inatel.InternetProviderBrowser.config.security.AuthenticatorTokenFilter;
 import br.inatel.InternetProviderBrowser.config.security.TokenService;
-import br.inatel.InternetProviderBrowser.config.security.UserRepo;
+import br.inatel.InternetProviderBrowser.config.security.UserService;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
-	@Autowired
-	private AuthenticationService authServ;
+public class SecurityConfigInstaller {
+//	@Autowired
+//	private ClientAuthenticationService authServ;
 	@Autowired
 	private TokenService tokenService;
 	@Autowired
-	private UserRepo userRepo;
+	private UserService userService;
 
 //	@Bean
 //	public AuthenticationManager authenticationBuilder(AuthenticationManagerBuilder auth) throws Exception {
@@ -33,19 +32,16 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests(auth1 -> {
-			try {
-				auth1//
-//						.antMatchers("/").permitAll()//
-//						.anyRequest().authenticated().and().csrf().disable()//
-//						.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//
-//						.and().addFilterBefore(new AuthenticatorTokenFilter(tokenService, userRepo),
-//								UsernamePasswordAuthenticationFilter.class);//
-						.anyRequest().permitAll();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
+		http.authorizeHttpRequests()//
+				.antMatchers("/").permitAll()//
+				.antMatchers("/installer").authenticated()//
+				.antMatchers("/plan").authenticated()//
+				.anyRequest().denyAll()//
+				.and().csrf().disable()//
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//
+				.and().addFilterBefore( //
+						new AuthenticatorTokenFilter(tokenService, userService),
+						UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
 
