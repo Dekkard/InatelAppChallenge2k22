@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import br.inatel.InternetProviderBrowser.config.security.model.User;
 
 @Service
-public class ClientAuthenticationService implements UserDetailsService{
+public class AuthenticationService implements UserDetailsService{
 
 	@Autowired
 	UserService clientService;

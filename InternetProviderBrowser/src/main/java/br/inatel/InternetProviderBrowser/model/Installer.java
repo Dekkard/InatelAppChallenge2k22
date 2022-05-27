@@ -50,14 +50,13 @@ public class Installer {
 	}
 
 	public Installer(@Length(max = 255) @NotNull String name, @Min(1) @Max(10) Integer rating, BigDecimal priceKm,
-			BigDecimal lat, BigDecimal lng, List<Plan> listPlan) {
+			BigDecimal lat, BigDecimal lng) {
 		super();
 		this.name = name;
 		this.rating = rating;
 		this.priceKm = priceKm;
 		this.lat = lat;
 		this.lng = lng;
-		this.listPlan = listPlan;
 	}
 
 	public Installer(Long id, @Length(max = 255) @NotNull String name, @Min(1) @Max(10) Integer rating,

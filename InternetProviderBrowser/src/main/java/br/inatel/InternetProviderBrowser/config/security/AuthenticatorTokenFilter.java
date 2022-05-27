@@ -27,15 +27,16 @@ public class AuthenticatorTokenFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		String token = recuperarToken(request);
-		boolean valido = ts.isValid(token);
-		if(valido) {
-			authenticateClient(token);
-		}
+		boolean clienteValido = ts.isClientValid(token);
+		boolean instaladorValido = ts.isInstallerValid(token);
+		if(clienteValido)
+			authenticateUser(token, ts.getClientUserId(token));
+		else if(instaladorValido)
+			authenticateUser(token, ts.getInstallerUserId(token));
 		filterChain.doFilter(request, response);
 	}
 
-	private void authenticateClient(String token) {
-		Long idUser = ts.getUserId(token);
+	private void authenticateUser(String token, Long idUser) {
 		User user = ur.find(idUser);
 		UsernamePasswordAuthenticationToken authenticate = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(authenticate);

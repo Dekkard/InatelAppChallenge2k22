@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.inatel.InternetProviderBrowser.model.Client;
 import br.inatel.InternetProviderBrowser.model.DTO.ClientDTO;
 import br.inatel.InternetProviderBrowser.service.ClientService;
-import br.inatel.InternetProviderBrowser.service.PlanService;
 
 @RestController
 @RequestMapping("/client")
@@ -23,7 +22,7 @@ public class ClientController implements ControllerModel<Client, ClientDTO, Long
 
 	@Override
 	public ResponseEntity<List<ClientDTO>> getMappingMethod() {
-		List<Client> listClient = cs.list();																																																																																																																																																				
+		List<Client> listClient = cs.list();
 		List<ClientDTO> listClientDTO = listClient.stream().map(Client::modeltoDTO).collect(Collectors.toList());
 		if (!listClientDTO.isEmpty())
 			return new ResponseEntity<>(listClientDTO, HttpStatus.OK);

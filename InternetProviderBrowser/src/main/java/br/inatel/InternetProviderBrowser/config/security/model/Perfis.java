@@ -15,6 +15,12 @@ public class Perfis implements GrantedAuthority{
 	private Long id;
 	private String nome;
 
+	public Perfis() {
+	}
+	public Perfis(String nome) {
+		this.nome = nome;
+	}
+	
 	public Long getId() {
 		return id;
 	}
