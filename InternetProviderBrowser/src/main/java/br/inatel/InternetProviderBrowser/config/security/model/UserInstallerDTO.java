@@ -3,6 +3,8 @@ package br.inatel.InternetProviderBrowser.config.security.model;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import br.inatel.InternetProviderBrowser.model.Installer;
 
 @SuppressWarnings("unused")
@@ -32,7 +34,7 @@ public class UserInstallerDTO {
 	}
 
 	public User getUserInfo() {
-		return new User(genUsernameInitials(name), password, email);
+		return new User(genUsernameInitials(name), new BCryptPasswordEncoder().encode(password), email);
 	}
 
 	private String genUsernameInitials(String name) {

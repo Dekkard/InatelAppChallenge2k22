@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import br.inatel.InternetProviderBrowser.model.Client;
 
 @SuppressWarnings("unused")
@@ -26,13 +28,33 @@ public class UserClientDTO {
 		this.password = password;
 	}
 	
+	public String getName() {
+		return name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public Long getCpf() {
+		return cpf;
+	}
+
+	public String getBirthDate() {
+		return birthDate;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
 	public Client getClientInfo() {
 		LocalDate birthDate = LocalDate.parse(this.birthDate, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		return new Client(name,cpf,birthDate);
 	}
 	
 	public User getUserInfo() {
-		return new User(genUsernameInitials(name),password,email);
+		return new User(genUsernameInitials(name),new BCryptPasswordEncoder().encode(password),email);
 	}
 	
 	private String genUsernameInitials(String name) {

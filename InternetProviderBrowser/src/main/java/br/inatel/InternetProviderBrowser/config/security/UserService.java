@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.inatel.InternetProviderBrowser.config.security.model.Perfis;
 import br.inatel.InternetProviderBrowser.config.security.model.User;
 
 @Service
@@ -29,6 +30,10 @@ public class UserService {
 	
 	public User insert(User user) {
 		return em.merge(user);
+	}
+	
+	public Perfis findPerfil(Long id) {
+		return em.find(Perfis.class, id);
 	}
 
 }

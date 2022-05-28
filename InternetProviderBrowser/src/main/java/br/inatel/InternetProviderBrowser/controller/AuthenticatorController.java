@@ -61,11 +61,10 @@ public class AuthenticatorController {
 	@PostMapping("/client/registry")
 	public ResponseEntity<HttpStatus> createClient(@RequestBody @Valid UserClientDTO userbody) {
 		try {
-			System.out.println(userbody.getClientInfo().getName());
 			cs.insert(userbody.getClientInfo());
 			User user = userbody.getUserInfo();
 			List<Perfis> lp = new ArrayList<>();
-			lp.add(new Perfis("Client"));
+			lp.add(us.findPerfil(1l));
 			user.setPerfis(lp);
 			us.insert(user);
 			return new ResponseEntity<>(HttpStatus.CREATED);
@@ -92,7 +91,7 @@ public class AuthenticatorController {
 			is.insert(userbody.getInstallerInfo());
 			User user = userbody.getUserInfo();
 			List<Perfis> lp = new ArrayList<>();
-			lp.add(new Perfis("Installer"));
+			lp.add(us.findPerfil(2l));
 			user.setPerfis(lp);
 			us.insert(user);
 			return new ResponseEntity<>(HttpStatus.CREATED);

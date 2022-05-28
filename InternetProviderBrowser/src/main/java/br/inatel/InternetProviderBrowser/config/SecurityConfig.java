@@ -52,12 +52,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/").permitAll()
 				.antMatchers("/auth/client").permitAll()//
 				.antMatchers("/auth/client/registry").permitAll()//
+				//
 				.antMatchers("/auth/installer").permitAll()//
 				.antMatchers("/auth/installer/registry").permitAll()//
 				.antMatchers("/client").hasAuthority("Client")//
 				.antMatchers(HttpMethod.GET, "/plan").hasAuthority("Client")//
+				//
 				.antMatchers("/installer").hasAuthority("Installer")//
 				.antMatchers("/plan").hasAuthority("Installer")//
+				//
 				.anyRequest().authenticated()//
 				.and().csrf().disable()//
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//
