@@ -16,13 +16,24 @@ public class TokenService {
 
 	private static String secretKeyI = "rm'!@N=Ke!~p8VTA2ZRK~nMDQX5Uvm!m'D&]{@Vr?G;2?XhbC:Qa#9#eMLN\\\\}x3?JR3.2zr~v)gYF^8\\\\:8>:XfB:Ww75N/emt9Yj[bQMNCWwW\\\\J?N,nvH.<2\\\\.r~w]*e~vgak)-wD3g9JWPy;CrY*.Kd2_D])=><D?YhBaSua5hW%{2]_FVXzb9`8FH^b[X3jzVER&:jw2<=c38=>L/zBq`}C6tT*cCSVC^c]-L}&/";
 
-	public String gerarToken(Authentication a) {
+	public String gerarToken(Authentication a, String perfil) {
 		Date now = new Date();
+		String key = "";
+		switch(perfil){
+			case "Client":
+			key = secretKeyC;
+			break;
+			case "Installer":
+			key = secretKeyI;
+			break;
+			default:
+			break;
+			}
 		return Jwts.builder().setIssuer("Spring Boot Security Model")//
 				.setSubject(((User) a.getPrincipal()).getId().toString())//
 				.setIssuedAt(now)//
 				.setExpiration(new Date(now.getTime() + (900000l)))//
-				.signWith(SignatureAlgorithm.HS256, secretKeyC)//
+				.signWith(SignatureAlgorithm.HS256, key)//
 				.compact();
 	}
 
