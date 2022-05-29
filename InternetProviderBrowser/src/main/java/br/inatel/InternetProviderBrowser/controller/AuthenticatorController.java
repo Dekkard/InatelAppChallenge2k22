@@ -50,7 +50,7 @@ public class AuthenticatorController {
 	public ResponseEntity<TokenDTO> postAuthClient(@RequestBody @Valid LoginForm lf) {
 		try {
 			Authentication a = am.authenticate(lf.converter());
-			String token = ts.gerarToken(a);
+			String token = ts.gerarToken(a, "Client");
 			TokenDTO tokenDTO = new TokenDTO(token, "Bearer");
 			return new ResponseEntity<>(tokenDTO, HttpStatus.OK);
 		} catch (AuthenticationException e) {
@@ -77,7 +77,7 @@ public class AuthenticatorController {
 	public ResponseEntity<TokenDTO> postAuthInstaller(@RequestBody @Valid LoginForm lf) {
 		try {
 			Authentication a = am.authenticate(lf.converter());
-			String token = ts.gerarToken(a);
+			String token = ts.gerarToken(a, "Installer");
 			TokenDTO tokenDTO = new TokenDTO(token, "Bearer");
 			return new ResponseEntity<>(tokenDTO, HttpStatus.OK);
 		} catch (AuthenticationException e) {
