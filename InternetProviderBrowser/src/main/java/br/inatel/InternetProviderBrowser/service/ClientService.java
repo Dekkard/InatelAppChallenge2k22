@@ -37,6 +37,8 @@ public class ClientService implements ServiceModel<Client, Long> {
 		c.setName(client.getName());
 		c.setCpf(client.getCpf());
 		c.setBirthDate(client.getBirthDate());
+		c.setLat(client.getLat());
+		c.setLng(client.getLng());
 		return em.merge(c);
 	}
 
