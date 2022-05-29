@@ -17,7 +17,6 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 import br.inatel.InternetProviderBrowser.model.DTO.InstallerDTO;
-import br.inatel.InternetProviderBrowser.model.DTO.PlanDTO;
 
 @Entity
 public class Installer {
@@ -38,14 +37,14 @@ public class Installer {
 
 	public Installer() {
 	}
-	
+
 	public Installer(Installer i) {
 		super();
 //		this.name = i.getName();
 		this.rating = i.getRating();
 		this.priceKm = i.getPriceKm();
 		this.lat = i.getLat();
-		this.lng =  i.getLng();
+		this.lng = i.getLng();
 		this.listPlan = i.getListPlan();
 	}
 
@@ -69,6 +68,7 @@ public class Installer {
 		this.lat = lat;
 		this.lng = lng;
 	}
+
 	public Installer(Long id, @Length(max = 255) @NotNull String name, @Min(1) @Max(10) Integer rating,
 			BigDecimal priceKm, BigDecimal lat, BigDecimal lng, List<Plan> listPlan) {
 		super();
@@ -134,7 +134,15 @@ public class Installer {
 	}
 
 	public static InstallerDTO modeltoDTO(Installer p) {
-		List<PlanDTO> lp = p.getListPlan().stream().map(Plan::modeltoDTO).collect(Collectors.toList());
-		return new InstallerDTO(p.getId(), p.getName(), p.getRating().getPlainString(), p.getPriceKm().getPlainString(), p.getLat().getPlainString(), p.getLng().getPlainString(), lp);
+		return new InstallerDTO(p.getId(), //
+				p.getName(), //
+				p.getRating(), //
+				p.getPriceKm().toPlainString(), //
+				p.getLat().toPlainString(), //
+				p.getLng().toPlainString(), //
+				p.getListPlan()//
+						.stream()//
+						.map(Plan::modeltoDTO)//
+						.collect(Collectors.toList()));
 	}
 }

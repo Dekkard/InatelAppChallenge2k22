@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,6 +38,7 @@ public class Client {
 
 	public Client() {
 	}
+
 	public Client(Client c) {
 		super();
 //		this.id = c.getId();
@@ -57,8 +59,9 @@ public class Client {
 		this.lng = lng;
 	}
 
-	public Client(Long id, @Length(max = 255) @NotNull String name, @Digits(integer = 11, fraction = 0) @NotNull Long cpf,
-			LocalDate birthDate, BigDecimal lat, BigDecimal lng) {
+	public Client(Long id, @Length(max = 255) @NotNull String name,
+			@Digits(integer = 11, fraction = 0) @NotNull Long cpf, LocalDate birthDate, BigDecimal lat,
+			BigDecimal lng) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -68,8 +71,9 @@ public class Client {
 		this.lng = lng;
 	}
 
-	public Client(Long id, @Length(max = 255) @NotNull String name, @Digits(integer = 11, fraction = 0) @NotNull Long cpf,
-			LocalDate birthDate, BigDecimal lat, BigDecimal lng, List<Plan> listPlan) {
+	public Client(Long id, @Length(max = 255) @NotNull String name,
+			@Digits(integer = 11, fraction = 0) @NotNull Long cpf, LocalDate birthDate, BigDecimal lat, BigDecimal lng,
+			List<Plan> listPlan) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -91,13 +95,16 @@ public class Client {
 	public Long getCpf() {
 		return cpf;
 	}
-public BigDecimal getLat()  {
-	return lat;
+
+	public BigDecimal getLat() {
+		return lat;
 	}
-	public BigDecimal getLng()  {
-	return lng;
+
+	public BigDecimal getLng() {
+		return lng;
 	}
-	public List<Plan> getPlan() {
+
+	public List<Plan> getListPlan() {
 		return listPlan;
 	}
 
@@ -116,22 +123,30 @@ public BigDecimal getLat()  {
 	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
-	public void setLat(BigDecimal lat){
+
+	public void setLat(BigDecimal lat) {
 		this.lat = lat;
-		}
-		public void setLng(Bigdecimal lng){
-			this.lng = lng;
-			}
+	}
+
+	public void setLng(BigDecimal lng) {
+		this.lng = lng;
+	}
 
 	public void setListPlan(List<Plan> listPlan) {
 		this.listPlan = listPlan;
 	}
 
 	public static ClientDTO modeltoDTO(Client c) {
-		ClientDTO clientDTO = new ClientDTO(c.getId(), c.getName(), c.getCpf(),
-				c.getBirthDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), Client.getLat().getPlainString(), Client.getLng().getPlainString());
-
-		return clientDTO;
+		return new ClientDTO(c.getId(), //
+				c.getName(), //
+				c.getCpf(), //
+				c.getBirthDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), //
+				c.getLat().toPlainString(), //
+				c.getLng().toPlainString(), //
+				c.getListPlan()//
+						.stream()//
+						.map(Plan::modeltoDTO)//
+						.collect(Collectors.toList()));
 	}
 
 }

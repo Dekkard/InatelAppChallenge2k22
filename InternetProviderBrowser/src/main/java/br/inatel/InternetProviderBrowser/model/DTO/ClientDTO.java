@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import br.inatel.InternetProviderBrowser.model.Client;
 
@@ -31,7 +32,7 @@ public class ClientDTO {
 		this.lng = lng;
 	}
 
-	public ClientDTO(Long id, String name, Long cpf, String birthDate, String lat, String lng
+	public ClientDTO(Long id, String name, Long cpf, String birthDate, String lat, String lng,
 			List<PlanDTO> listPlanDTO) {
 		super();
 		this.id = id;
@@ -58,20 +59,29 @@ public class ClientDTO {
 	public String getBirthDate() {
 		return birthDate;
 	}
-public String getLat(){
-	return lat;
+
+	public String getLat() {
+		return lat;
 	}
+
 	public String getLng() {
-	return lng;
+		return lng;
 	}
+
 	public List<PlanDTO> getListPlanDTO() {
 		return listPlanDTO;
 	}
 
 	public static Client DTOtoModel(ClientDTO cDto) {
-		List<Plan> lp = cDto.getListPlanDTO().stream().map(PlanDTO::DTOtoModel).collect(Collectors.toList());
-		Client client = new Client(cDto.getId(), cDto.getName(), cDto.getCpf(),
-				LocalDate.parse(cDto.getBirthDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy")), Client.g, new BigDecimal(ClientDTO.getLat()), new BigDecimal(ClientDTO.getLng()));
-		return client;
+		return new Client(cDto.getId(), //
+				cDto.getName(), //
+				cDto.getCpf(), //
+				LocalDate.parse(cDto.getBirthDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy")), //
+				new BigDecimal(cDto.getLat()), //
+				new BigDecimal(cDto.getLng()), //
+				cDto.getListPlanDTO()//
+						.stream()//
+						.map(PlanDTO::DTOtoModel)//
+						.collect(Collectors.toList()));
 	}
 }

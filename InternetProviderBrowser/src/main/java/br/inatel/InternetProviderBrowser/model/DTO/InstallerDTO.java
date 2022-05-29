@@ -6,17 +6,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import br.inatel.InternetProviderBrowser.model.Installer;
-import br.inatel.InternetProviderBrowser.model.Plan;
 
 public class InstallerDTO {
 	private Long id;
 	private String name;
 	private Integer rating;
-	private BigDecimal priceKm;
-	private BigDecimal lat;
-	private BigDecimal lng;
+	private String priceKm;
+	private String lat;
+	private String lng;
 	private List<PlanDTO> listPlanDTO = new ArrayList<>();
-	
+
 	public InstallerDTO() {
 	}
 
@@ -29,8 +28,8 @@ public class InstallerDTO {
 		this.lng = iDto.getLng();
 		this.listPlanDTO = iDto.getListPlanDTO();
 	}
-	
-	public InstallerDTO(String name, Integer rating, BigDecimal priceKm, BigDecimal lat, BigDecimal lng) {
+
+	public InstallerDTO(String name, Integer rating, String priceKm, String lat, String lng) {
 		super();
 		this.name = name;
 		this.rating = rating;
@@ -39,7 +38,7 @@ public class InstallerDTO {
 		this.lng = lng;
 	}
 
-	public InstallerDTO(Long id, String name, Integer rating, BigDecimal priceKm, BigDecimal lat, BigDecimal lng) {
+	public InstallerDTO(Long id, String name, Integer rating, String priceKm, String lat, String lng) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -49,7 +48,7 @@ public class InstallerDTO {
 		this.lng = lng;
 	}
 
-	public InstallerDTO(Long id, String name, Integer rating, BigDecimal priceKm, BigDecimal lat, BigDecimal lng,
+	public InstallerDTO(Long id, String name, Integer rating, String priceKm, String lat, String lng,
 			List<PlanDTO> listPlanDTO) {
 		super();
 		this.id = id;
@@ -73,15 +72,15 @@ public class InstallerDTO {
 		return rating;
 	}
 
-	public BigDecimal getPriceKm() {
+	public String getPriceKm() {
 		return priceKm;
 	}
 
-	public BigDecimal getLat() {
+	public String getLat() {
 		return lat;
 	}
 
-	public BigDecimal getLng() {
+	public String getLng() {
 		return lng;
 	}
 
@@ -90,8 +89,16 @@ public class InstallerDTO {
 	}
 
 	public static Installer DTOtoModel(InstallerDTO pDto) {
-		List<Plan> li = pDto.getListPlanDTO().stream().map(PlanDTO::DTOtoModel).collect(Collectors.toList());
-		return new Installer(pDto.getId(), pDto.getName(), pDto.getRating(), pDto.getPriceKm(), pDto.getLat(), pDto.getLng(), li);
+		return new Installer(pDto.getId(), //
+				pDto.getName(), //
+				pDto.getRating(), //
+				new BigDecimal(pDto.getPriceKm()), //
+				new BigDecimal(pDto.getLat()), //
+				new BigDecimal(pDto.getLng()), //
+				pDto.getListPlanDTO() //
+						.stream() //
+						.map(PlanDTO::DTOtoModel) //
+						.collect(Collectors.toList()));
 	}
 
 }

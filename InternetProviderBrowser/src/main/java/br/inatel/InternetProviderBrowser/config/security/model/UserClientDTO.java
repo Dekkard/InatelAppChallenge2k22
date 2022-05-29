@@ -1,5 +1,6 @@
 package br.inatel.InternetProviderBrowser.config.security.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -11,20 +12,24 @@ import br.inatel.InternetProviderBrowser.model.Client;
 @SuppressWarnings("unused")
 public class UserClientDTO {
 	private String name;
-	private String email;
 	private Long cpf;
 	private String birthDate;
+	private String lat;
+	private String lng;
+	private String email;
 	private String password;
 	
 	public UserClientDTO() {
 	}
 
-	public UserClientDTO(String name, String email, Long cpf, String birthDate, String password) {
+	public UserClientDTO(String name, Long cpf, String birthDate, String lat, String lng, String email, String password) {
 		super();
 		this.name = name;
-		this.email = email;
 		this.cpf = cpf;
 		this.birthDate = birthDate;
+		this.lat = lat;
+		this.lng = lng;
+		this.email = email;
 		this.password = password;
 	}
 	
@@ -50,7 +55,7 @@ public class UserClientDTO {
 
 	public Client getClientInfo() {
 		LocalDate birthDate = LocalDate.parse(this.birthDate, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-		return new Client(name,cpf,birthDate);
+		return new Client(name,cpf,birthDate,new BigDecimal(lat),new BigDecimal(lng));
 	}
 	
 	public User getUserInfo() {

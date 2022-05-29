@@ -40,7 +40,7 @@ public class Plan {
 
 	public Plan() {
 	}
-	
+
 	public Plan(Plan p) {
 		this.isp = p.getIsp();
 		this.dataCapacity = p.getDataCapacity();
@@ -180,10 +180,9 @@ public class Plan {
 				p.getPrice().toPlainString(), //
 				p.getInternetType().toString(), //
 				p.getListClient()//
-					.stream()//
-					.map(Client::modeltoDTO)//
-					.collect(Collectors.toList()),//
-				Installer.modeltoDTO(p.getInstaller())
-				);
+						.stream()//
+						.map(Client::modeltoDTO)//
+						.collect(Collectors.toList()), //
+				Installer.modeltoDTO(p.getInstaller()));
 	}
 }
