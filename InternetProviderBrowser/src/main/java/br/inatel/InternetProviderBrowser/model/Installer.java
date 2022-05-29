@@ -135,6 +135,6 @@ public class Installer {
 
 	public static InstallerDTO modeltoDTO(Installer p) {
 		List<PlanDTO> lp = p.getListPlan().stream().map(Plan::modeltoDTO).collect(Collectors.toList());
-		return new InstallerDTO(p.getId(), p.getName(), p.getRating(), p.getPriceKm(), p.getLat(), p.getLng(), lp);
+		return new InstallerDTO(p.getId(), p.getName(), p.getRating().getPlainString(), p.getPriceKm().getPlainString(), p.getLat().getPlainString(), p.getLng().getPlainString(), lp);
 	}
 }
