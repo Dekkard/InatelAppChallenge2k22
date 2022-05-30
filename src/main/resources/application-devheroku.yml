@@ -11,11 +11,7 @@ spring:
       properties:
          hibernate:
             show_sql: true
-            format_sql: true    
-   h2:
-      console:
-         enabled: true
-         path: /h2
+            format_sql: true
    mvc:
       pathmatch:
          matching-strategy: ant_path_matcher
