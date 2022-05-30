@@ -18,11 +18,12 @@ public class UserClientDTO {
 	private String lng;
 	private String email;
 	private String password;
-	
+
 	public UserClientDTO() {
 	}
 
-	public UserClientDTO(String name, Long cpf, String birthDate, String lat, String lng, String email, String password) {
+	public UserClientDTO(String name, Long cpf, String birthDate, String lat, String lng, String email,
+			String password) {
 		super();
 		this.name = name;
 		this.cpf = cpf;
@@ -32,13 +33,9 @@ public class UserClientDTO {
 		this.email = email;
 		this.password = password;
 	}
-	
+
 	public String getName() {
 		return name;
-	}
-
-	public String getEmail() {
-		return email;
 	}
 
 	public Long getCpf() {
@@ -49,19 +46,31 @@ public class UserClientDTO {
 		return birthDate;
 	}
 
+	public String getLat() {
+		return lat;
+	}
+
+	public String getLng() {
+		return lng;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
 	public String getPassword() {
 		return password;
 	}
 
 	public Client getClientInfo() {
 		LocalDate birthDate = LocalDate.parse(this.birthDate, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-		return new Client(name,cpf,birthDate,new BigDecimal(lat),new BigDecimal(lng));
+		return new Client(name, cpf, birthDate, new BigDecimal(lat), new BigDecimal(lng));
 	}
-	
+
 	public User getUserInfo() {
-		return new User(genUsernameInitials(name),new BCryptPasswordEncoder().encode(password),email);
+		return new User(genUsernameInitials(name), new BCryptPasswordEncoder().encode(password), email);
 	}
-	
+
 	private String genUsernameInitials(String name) {
 		StringBuilder username = new StringBuilder();
 		String[] nameSplit = name.toLowerCase().split(" ");
@@ -72,6 +81,6 @@ public class UserClientDTO {
 	}
 
 	private String genUsernameTruncate(String name) {
-		return name.toLowerCase().replace(" ", "").substring(0,20);
+		return name.toLowerCase().replace(" ", "").substring(0, 20);
 	}
 }
