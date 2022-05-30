@@ -1,6 +1,7 @@
 # Inatel App Challenge 2k22
-App Protótipo para o desafio Inatel App Challenge 2k22
-Branch de desenvolvimento
+App protótipo para o desafio Inatel App Challenge 2k22
+
+Branch de desenvolvimento para realizar deploy
 
 ## Escopo
 Criar aplicativo "Uber para procura de Provedor de Internet"
