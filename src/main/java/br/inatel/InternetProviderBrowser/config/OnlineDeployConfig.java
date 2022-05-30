@@ -11,7 +11,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 public class OnlineDeployConfig {
 
-	public static final String dbUrl = System.getenv("DATABASE_URL");
+	public static final String dbUrl = System.getenv("CLEARDB_DATABASE_URL");
 	
 	 @Bean
 	  public DataSource dataSource() {
