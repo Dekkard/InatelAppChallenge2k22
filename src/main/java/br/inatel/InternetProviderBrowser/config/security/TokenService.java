@@ -19,20 +19,20 @@ public class TokenService {
 	public String gerarToken(Authentication a, String perfil) {
 		Date now = new Date();
 		String key = "";
-		switch(perfil){
-			case "Client":
+		switch (perfil) {
+		case "Client":
 			key = secretKeyC;
 			break;
-			case "Installer":
+		case "Installer":
 			key = secretKeyI;
 			break;
-			default:
+		default:
 			break;
-			}
+		}
 		return Jwts.builder().setIssuer("Spring Boot Security Model")//
 				.setSubject(((User) a.getPrincipal()).getId().toString())//
 				.setIssuedAt(now)//
-				.setExpiration(new Date(now.getTime() + (900000l)))//
+				.setExpiration(new Date(now.getTime() + (86400000l)))//
 				.signWith(SignatureAlgorithm.HS256, key)//
 				.compact();
 	}

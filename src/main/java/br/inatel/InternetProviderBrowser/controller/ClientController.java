@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import br.inatel.InternetProviderBrowser.model.Client;
 import br.inatel.InternetProviderBrowser.model.DTO.ClientDTO;
 import br.inatel.InternetProviderBrowser.service.ClientService;
+import br.inatel.InternetProviderBrowser.service.ContractService;
+import br.inatel.InternetProviderBrowser.service.PlanService;
 
 @RestController
 @RequestMapping("/client")
@@ -19,6 +21,10 @@ public class ClientController implements ControllerModel<Client, ClientDTO, Long
 
 	@Autowired
 	ClientService cs;
+	@Autowired
+	PlanService ps;
+	@Autowired
+	ContractService cos;
 
 	@Override
 	public ResponseEntity<List<ClientDTO>> getMappingMethod() {
@@ -32,8 +38,8 @@ public class ClientController implements ControllerModel<Client, ClientDTO, Long
 
 	@Override
 	public ResponseEntity<ClientDTO> getByIdMappingMethod(Long id) {
+		Client client = cs.find(id);
 		try {
-			Client client = cs.find(id);
 			return new ResponseEntity<>(Client.modeltoDTO(client), HttpStatus.OK);
 		} catch (NullPointerException e) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -41,20 +47,20 @@ public class ClientController implements ControllerModel<Client, ClientDTO, Long
 	}
 
 	@Override
-	public ResponseEntity<Client> postMappingMethod(ClientDTO modelDTO) {
+	public ResponseEntity<ClientDTO> postMappingMethod(ClientDTO modelDTO) {
 		try {
 			Client client = ClientDTO.DTOtoModel(modelDTO);
-			return new ResponseEntity<>(cs.insert(client), HttpStatus.CREATED);
+			return new ResponseEntity<>(Client.modeltoDTO(cs.insert(client)), HttpStatus.CREATED);
 		} catch (NullPointerException e) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
 
 	@Override
-	public ResponseEntity<Client> putMappingMethod(Long id, ClientDTO modelDTO) {
+	public ResponseEntity<ClientDTO> putMappingMethod(Long id, ClientDTO modelDTO) {
+		Client client = cs.update(id, ClientDTO.DTOtoModel(modelDTO));
 		try {
-			Client client = cs.update(id, ClientDTO.DTOtoModel(modelDTO));
-			return new ResponseEntity<>(client, HttpStatus.ACCEPTED);
+			return new ResponseEntity<>(Client.modeltoDTO(client), HttpStatus.ACCEPTED);
 		} catch (NullPointerException e) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}

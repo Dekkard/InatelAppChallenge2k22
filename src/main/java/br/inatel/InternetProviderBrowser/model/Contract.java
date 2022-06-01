@@ -6,21 +6,27 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import br.inatel.InternetProviderBrowser.model.DTO.ClientDTO;
 import br.inatel.InternetProviderBrowser.model.DTO.ContractDTO;
+import br.inatel.InternetProviderBrowser.model.DTO.PlanDTO;
 
 @Entity
 public class Contract {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@ManyToOne
-	private Client client;
-	@ManyToOne
-	private Plan plan;
 	private BigDecimal totalPrice;
 	private InstallStatus installStatus;
+
+	@ManyToOne(targetEntity = Client.class)
+	@JoinColumn(name = "client_id", referencedColumnName = "id")
+	private Client client;
+	@ManyToOne(targetEntity = Plan.class)
+	@JoinColumn(name = "plan_id", referencedColumnName = "id")
+	private Plan plan;
 
 	public Contract() {
 	}
@@ -38,7 +44,7 @@ public class Contract {
 		this.installStatus = installStatus;
 	}
 
-	public Contract(Long id, Client client, Plan plan, BigDecimal totalPrice, InstallStatus installStatus) {
+	public Contract(Long id, BigDecimal totalPrice, InstallStatus installStatus, Client client, Plan plan) {
 		super();
 		this.id = id;
 		this.client = client;
@@ -88,7 +94,21 @@ public class Contract {
 	}
 
 	public static ContractDTO modeltoDTO(Contract c) {
-		return new ContractDTO(c.getId(), Client.modeltoDTO(c.getClient()), Plan.modeltoDTO(c.getPlan()),
-				c.getTotalPrice().toPlainString(), c.getInstallStatus().name());
+		ClientDTO clientDTO = new ClientDTO();
+		PlanDTO planDTO = new PlanDTO();
+		try {
+			clientDTO = Client.modeltoDTORL(c.getClient());
+		} catch (NullPointerException e) {
+		}
+		try {
+			planDTO = Plan.modeltoDTORL(c.getPlan());
+		} catch (NullPointerException e) {
+		}
+		return new ContractDTO(c.getId(), c.getTotalPrice().toPlainString(), c.getInstallStatus().name(), clientDTO,
+				planDTO);
+	}
+
+	public static ContractDTO modeltoDTORL(Contract c) {
+		return new ContractDTO(c.getId(), c.getTotalPrice().toPlainString(), c.getInstallStatus().name());
 	}
 }

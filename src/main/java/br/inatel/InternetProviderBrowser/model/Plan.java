@@ -9,12 +9,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
+import br.inatel.InternetProviderBrowser.model.DTO.ContractDTO;
+import br.inatel.InternetProviderBrowser.model.DTO.InstallerDTO;
 import br.inatel.InternetProviderBrowser.model.DTO.PlanDTO;
 
 @Entity
@@ -33,9 +36,10 @@ public class Plan {
 	private BigDecimal price;
 	private InternetType internetType;
 
-	@ManyToMany
-	List<Client> listClient = new ArrayList<>();
-	@ManyToOne
+	@OneToMany(mappedBy = "plan")
+	private List<Contract> listContract = new ArrayList<>();
+	@ManyToOne(targetEntity = Installer.class)
+	@JoinColumn(name = "installer_id", referencedColumnName = "id")
 	private Installer installer;
 
 	public Plan() {
@@ -80,7 +84,7 @@ public class Plan {
 
 	public Plan(Long id, @Length(max = 128) @NotNull String isp, BigDecimal dataCapacity, BigDecimal downloadSpeed,
 			BigDecimal uploadSpeed, @Length(max = 512) String description, BigDecimal price, InternetType internetType,
-			List<Client> listClient, Installer installer) {
+			Installer installer, List<Contract> listContract) {
 		super();
 		this.id = id;
 		this.isp = isp;
@@ -90,8 +94,8 @@ public class Plan {
 		this.description = description;
 		this.price = price;
 		this.internetType = internetType;
-		this.listClient = listClient;
 		this.installer = installer;
+		this.listContract = listContract;
 	}
 
 	public Long getId() {
@@ -126,8 +130,8 @@ public class Plan {
 		return internetType;
 	}
 
-	public List<Client> getListClient() {
-		return listClient;
+	public List<Contract> getListContract() {
+		return listContract;
 	}
 
 	public Installer getInstaller() {
@@ -162,27 +166,33 @@ public class Plan {
 		this.internetType = internetType;
 	}
 
-	public void setListClient(List<Client> listClient) {
-		this.listClient = listClient;
-	}
-
 	public void setInstaller(Installer installer) {
 		this.installer = installer;
 	}
 
+	public void setListContract(List<Contract> listContract) {
+		this.listContract = listContract;
+	}
+
 	public static PlanDTO modeltoDTO(Plan p) {
-		return new PlanDTO(p.getId(), //
-				p.getIsp(), //
-				p.getDataCapacity().toPlainString(), //
-				p.getDownloadSpeed().toPlainString(), //
-				p.getUploadSpeed().toPlainString(), //
-				p.getDescription(), //
-				p.getPrice().toPlainString(), //
-				p.getInternetType().toString(), //
-				p.getListClient()//
-						.stream()//
-						.map(Client::modeltoDTO)//
-						.collect(Collectors.toList()), //
-				Installer.modeltoDTO(p.getInstaller()));
+		List<ContractDTO> listContractDTO = new ArrayList<>();
+		try {
+			listContractDTO = p.getListContract().stream().map(Contract::modeltoDTORL).collect(Collectors.toList());
+		} catch (NullPointerException e) {
+		}
+		InstallerDTO installerDTO = new InstallerDTO();
+		try {
+			installerDTO = Installer.modeltoDTORL(p.getInstaller());
+		} catch (NullPointerException e) {
+		}
+		return new PlanDTO(p.getId(), p.getIsp(), p.getDataCapacity().toPlainString(),
+				p.getDownloadSpeed().toPlainString(), p.getUploadSpeed().toPlainString(), p.getDescription(),
+				p.getPrice().toPlainString(), p.getInternetType().toString(), installerDTO, listContractDTO);
+	}
+
+	public static PlanDTO modeltoDTORL(Plan p) {
+		return new PlanDTO(p.getId(), p.getIsp(), p.getDataCapacity().toPlainString(),
+				p.getDownloadSpeed().toPlainString(), p.getUploadSpeed().toPlainString(), p.getDescription(),
+				p.getPrice().toPlainString(), p.getInternetType().toString());
 	}
 }

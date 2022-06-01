@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 import br.inatel.InternetProviderBrowser.model.DTO.InstallerDTO;
+import br.inatel.InternetProviderBrowser.model.DTO.PlanDTO;
 
 @Entity
 public class Installer {
@@ -32,7 +33,7 @@ public class Installer {
 	private BigDecimal priceKm;
 	private BigDecimal lat;
 	private BigDecimal lng;
-	@OneToMany
+	@OneToMany(mappedBy = "installer")
 	private List<Plan> listPlan = new ArrayList<>();
 
 	public Installer() {
@@ -40,7 +41,7 @@ public class Installer {
 
 	public Installer(Installer i) {
 		super();
-//		this.name = i.getName();
+		this.name = i.getName();
 		this.rating = i.getRating();
 		this.priceKm = i.getPriceKm();
 		this.lat = i.getLat();
@@ -133,16 +134,22 @@ public class Installer {
 		this.listPlan = listPlan;
 	}
 
-	public static InstallerDTO modeltoDTO(Installer p) {
-		return new InstallerDTO(p.getId(), //
-				p.getName(), //
-				p.getRating(), //
-				p.getPriceKm().toPlainString(), //
-				p.getLat().toPlainString(), //
-				p.getLng().toPlainString(), //
-				p.getListPlan()//
-						.stream()//
-						.map(Plan::modeltoDTO)//
-						.collect(Collectors.toList()));
+	public static InstallerDTO modeltoDTO(Installer i) {
+		List<PlanDTO> listPlanDTO = new ArrayList<>();
+		try {
+			listPlanDTO = i.getListPlan().stream().map(Plan::modeltoDTORL).collect(Collectors.toList());
+		} catch (NullPointerException e) {
+		}
+		return new InstallerDTO(i.getId(), i.getName(), i.getRating(), i.getPriceKm().toPlainString(),
+				i.getLat().toPlainString(), listPlanDTO, i.getLng().toPlainString());
 	}
+
+	public static InstallerDTO modeltoDTORL(Installer i) {
+		return new InstallerDTO(i.getId(), i.getName(), i.getRating(), i.getPriceKm().toPlainString(),
+				i.getLat().toPlainString(), i.getLng().toPlainString());
+	}
+	/*
+	 * Método de transformação chama a transformação do plano que chama a de
+	 * instalador, criando loop! alternar para controle!(Talvez)
+	 */
 }

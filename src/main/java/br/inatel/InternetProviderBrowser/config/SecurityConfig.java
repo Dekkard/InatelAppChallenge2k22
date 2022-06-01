@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import br.inatel.InternetProviderBrowser.config.security.AuthenticationService;
@@ -50,16 +49,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests()//
 				.antMatchers("/").permitAll()
-				.antMatchers("/auth/client").permitAll()//
-				.antMatchers("/auth/client/registry").permitAll()//
+				.antMatchers("/auth/client","/auth/client/registry","/auth/installer","/auth/installer/registry").permitAll()//
 				//
-				.antMatchers("/auth/installer").permitAll()//
-				.antMatchers("/auth/installer/registry").permitAll()//
 				.antMatchers("/client").hasAuthority("Client")//
-				.antMatchers(HttpMethod.GET, "/plan").hasAuthority("Client")//
+				.antMatchers(HttpMethod.GET, "/plan").hasAnyAuthority("Client", "Installer")//
 				//
 				.antMatchers("/installer").hasAuthority("Installer")//
-				.antMatchers("/plan").hasAuthority("Installer")//
+				.antMatchers(HttpMethod.POST,"/plan").hasAuthority("Installer")//
+				.antMatchers(HttpMethod.PUT,"/plan").hasAuthority("Installer")//
+				.antMatchers(HttpMethod.DELETE,"*").denyAll()//
 				//
 				.anyRequest().authenticated()//
 				.and().csrf().disable()//

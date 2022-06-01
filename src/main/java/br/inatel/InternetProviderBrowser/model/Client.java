@@ -11,13 +11,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
 import br.inatel.InternetProviderBrowser.model.DTO.ClientDTO;
+import br.inatel.InternetProviderBrowser.model.DTO.ContractDTO;
 
 @Entity
 public class Client {
@@ -33,15 +34,15 @@ public class Client {
 	private LocalDate birthDate;
 	private BigDecimal lat;
 	private BigDecimal lng;
-	@ManyToMany
-	private List<Plan> listPlan = new ArrayList<>();
+	@OneToMany(mappedBy = "client")
+	private List<Contract> listContract = new ArrayList<>();
 
 	public Client() {
 	}
 
 	public Client(Client c) {
 		super();
-//		this.id = c.getId();
+		this.id = c.getId();
 		this.name = c.getName();
 		this.cpf = c.getCpf();
 		this.birthDate = c.getBirthDate();
@@ -73,15 +74,15 @@ public class Client {
 
 	public Client(Long id, @Length(max = 255) @NotNull String name,
 			@Digits(integer = 11, fraction = 0) @NotNull Long cpf, LocalDate birthDate, BigDecimal lat, BigDecimal lng,
-			List<Plan> listPlan) {
+			List<Contract> listContract) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.cpf = cpf;
 		this.birthDate = birthDate;
-		this.listPlan = listPlan;
 		this.lat = lat;
 		this.lng = lng;
+		this.listContract = listContract;
 	}
 
 	public Long getId() {
@@ -104,8 +105,8 @@ public class Client {
 		return lng;
 	}
 
-	public List<Plan> getListPlan() {
-		return listPlan;
+	public List<Contract> getListContract() {
+		return listContract;
 	}
 
 	public LocalDate getBirthDate() {
@@ -132,21 +133,24 @@ public class Client {
 		this.lng = lng;
 	}
 
-	public void setListPlan(List<Plan> listPlan) {
-		this.listPlan = listPlan;
+	public void setListContract(List<Contract> listContract) {
+		this.listContract = listContract;
 	}
 
 	public static ClientDTO modeltoDTO(Client c) {
-		return new ClientDTO(c.getId(), //
-				c.getName(), //
-				c.getCpf(), //
-				c.getBirthDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), //
-				c.getLat().toPlainString(), //
-				c.getLng().toPlainString(), //
-				c.getListPlan()//
-						.stream()//
-						.map(Plan::modeltoDTO)//
-						.collect(Collectors.toList()));
+		List<ContractDTO> listContractDTO = new ArrayList<>();
+		try {
+			listContractDTO = c.getListContract().stream().map(Contract::modeltoDTORL).collect(Collectors.toList());
+		} catch (NullPointerException e) {
+		}
+		return new ClientDTO(c.getId(), c.getName(), c.getCpf(),
+				c.getBirthDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), c.getLat().toPlainString(),
+				listContractDTO, c.getLng().toPlainString());
 	}
 
+	public static ClientDTO modeltoDTORL(Client c) {
+		return new ClientDTO(c.getId(), c.getName(), c.getCpf(),
+				c.getBirthDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), c.getLat().toPlainString(),
+				c.getLng().toPlainString());
+	}
 }
