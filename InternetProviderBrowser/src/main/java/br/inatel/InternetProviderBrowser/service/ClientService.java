@@ -21,6 +21,10 @@ public class ClientService implements ServiceModel<Client, Long> {
 		return em.createQuery("SELECT c FROM Client c", Client.class).getResultList();
 	}
 
+	public List<Client> list(Long id) {
+		return em.createQuery("SELECT c FROM Client c WHERE c.id = ?1", Client.class).setParameter(1, id).getResultList();
+	}
+
 	@Override
 	public Client find(Long id) {
 		return em.find(Client.class, id);

@@ -7,8 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import br.inatel.InternetProviderBrowser.model.Client;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+import br.inatel.InternetProviderBrowser.model.Client;
+import br.inatel.InternetProviderBrowser.model.Contract;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ClientDTO {
 	private Long id;
 	private String name;
@@ -17,7 +23,9 @@ public class ClientDTO {
 	private String lat;
 	private String lng;
 
-	private List<PlanDTO> listPlanDTO = new ArrayList<>();
+	private List<ContractDTO> listContractDTO = new ArrayList<>();
+
+	private List<Long> listContractId = new ArrayList<>();
 
 	public ClientDTO() {
 	}
@@ -33,7 +41,7 @@ public class ClientDTO {
 	}
 
 	public ClientDTO(Long id, String name, Long cpf, String birthDate, String lat, String lng,
-			List<PlanDTO> listPlanDTO) {
+			List<Long> listContractId) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -41,7 +49,19 @@ public class ClientDTO {
 		this.birthDate = birthDate;
 		this.lat = lat;
 		this.lng = lng;
-		this.listPlanDTO = listPlanDTO;
+		this.listContractId = listContractId;
+	}
+
+	public ClientDTO(Long id, String name, Long cpf, String birthDate, String lat, List<ContractDTO> listContractDTO,
+			String lng) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.cpf = cpf;
+		this.birthDate = birthDate;
+		this.lat = lat;
+		this.lng = lng;
+		this.listContractDTO = listContractDTO;
 	}
 
 	public Long getId() {
@@ -68,20 +88,29 @@ public class ClientDTO {
 		return lng;
 	}
 
-	public List<PlanDTO> getListPlanDTO() {
-		return listPlanDTO;
+	public List<Long> getListContractId() {
+		return listContractId;
+	}
+
+	public List<ContractDTO> getListContractDTO() {
+		return listContractDTO;
 	}
 
 	public static Client DTOtoModel(ClientDTO cDto) {
-		return new Client(cDto.getId(), //
-				cDto.getName(), //
-				cDto.getCpf(), //
-				LocalDate.parse(cDto.getBirthDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy")), //
-				new BigDecimal(cDto.getLat()), //
-				new BigDecimal(cDto.getLng()), //
-				cDto.getListPlanDTO()//
-						.stream()//
-						.map(PlanDTO::DTOtoModel)//
-						.collect(Collectors.toList()));
+		List<Contract> listContract = new ArrayList<>();
+		try {
+			listContract = cDto.getListContractDTO().stream().map(ContractDTO::DTOtoModelRL)
+					.collect(Collectors.toList());
+		} catch (NullPointerException e) {
+		}
+		return new Client(cDto.getId(), cDto.getName(), cDto.getCpf(),
+				LocalDate.parse(cDto.getBirthDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+				new BigDecimal(cDto.getLat()), new BigDecimal(cDto.getLng()), listContract);
+	}
+
+	public static Client DTOtoModelRL(ClientDTO cDto) {
+		return new Client(cDto.getId(), cDto.getName(), cDto.getCpf(),
+				LocalDate.parse(cDto.getBirthDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+				new BigDecimal(cDto.getLat()), new BigDecimal(cDto.getLng()));
 	}
 }

@@ -20,10 +20,10 @@ public interface ControllerModel<Entity, EntityDTO, EntityId> {
 	public ResponseEntity<EntityDTO> getByIdMappingMethod(@PathVariable("id") EntityId id);
 
 	@PostMapping
-	public ResponseEntity<Entity> postMappingMethod(@RequestBody @Validated EntityDTO modelDTO);
+	public ResponseEntity<EntityDTO> postMappingMethod(@RequestBody @Validated EntityDTO modelDTO);
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Entity> putMappingMethod(@PathVariable("id") EntityId id,
+	public ResponseEntity<EntityDTO> putMappingMethod(@PathVariable("id") EntityId id,
 			@RequestBody @Validated EntityDTO modelDTO);
 
 	@DeleteMapping("/{id}")

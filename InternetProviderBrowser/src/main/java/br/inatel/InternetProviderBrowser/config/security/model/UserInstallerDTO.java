@@ -28,9 +28,33 @@ public class UserInstallerDTO {
 		this.lat = lat;
 		this.lng = lng;
 	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public String getPriceKm() {
+		return priceKm;
+	}
+
+	public String getLat() {
+		return lat;
+	}
+
+	public String getLng() {
+		return lng;
+	}
 
 	public Installer getInstallerInfo() {
-		return new Installer(name, 0, new BigDecimal(priceKm), new BigDecimal(lat), new BigDecimal(lng));
+		return new Installer(name, 1, new BigDecimal(priceKm), new BigDecimal(lat), new BigDecimal(lng));
 	}
 
 	public User getUserInfo() {

@@ -34,9 +34,14 @@ public class InstallerService implements ServiceModel<Installer, Long> {
 
 	@Override
 	public Installer update(Long id, Installer installer) {
-		Installer p = em.find(Installer.class, id);
-		p = new Installer(installer);
-		return em.merge(p);
+		Installer i = em.find(Installer.class, id);
+		i.setName(installer.getName());
+		i.setRating(installer.getRating());
+		i.setPriceKm(installer.getPriceKm());
+		i.setLat(installer.getLat());
+		i.setLng(installer.getLng());
+		i.setListPlan(installer.getListPlan());
+		return em.merge(i);
 	}
 
 	@Override

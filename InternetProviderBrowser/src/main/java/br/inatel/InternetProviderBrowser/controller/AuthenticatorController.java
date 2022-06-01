@@ -55,6 +55,8 @@ public class AuthenticatorController {
 			return new ResponseEntity<>(tokenDTO, HttpStatus.OK);
 		} catch (AuthenticationException e) {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		} catch (NullPointerException e) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -82,6 +84,8 @@ public class AuthenticatorController {
 			return new ResponseEntity<>(tokenDTO, HttpStatus.OK);
 		} catch (AuthenticationException e) {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		} catch (NullPointerException e) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
 
